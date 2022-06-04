@@ -1,0 +1,34 @@
+{
+    "name": "silverstripe/ss-template-engine",
+    "type": "silverstripe-vendormodule",
+    "description": "The SilverStripe ss templating engine",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "silverstripe",
+        "template",
+        "parser"
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "silverstripe/framework": "^4@dev",
+        "silverstripe/vendor-plugin": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripe\\View\\": "src/View/"
+        }
+    },
+    "include-path": [
+        "src/",
+        "thirdparty/"
+    ],
+    "scripts": {
+        "php-peg": "php thirdparty/php-peg/cli.php src/View/SSTemplateParser.peg > src/View/SSTemplateParser.php"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
