@@ -34,13 +34,8 @@ use SilverStripe\Core\Injector\Injector;
 use Parser;
 use InvalidArgumentException;
 
-// We want this to work when run by hand too
-if (defined('THIRDPARTY_PATH')) {
-    require_once(THIRDPARTY_PATH . '/php-peg/Parser.php');
-} else {
-    $base = dirname(__FILE__);
-    require_once($base.'/../thirdparty/php-peg/Parser.php');
-}
+$base = dirname(__FILE__);
+require_once($base.'/../../thirdparty/php-peg/Parser.php');
 
 /**
   * This is the parser for the SilverStripe template language. It gets called on a string and uses a php-peg parser
