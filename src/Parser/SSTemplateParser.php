@@ -7,7 +7,7 @@ WARNING: This file has been machine generated. Do not edit it, or your changes w
 
 
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\Parser;
 
 use SilverStripe\Core\Injector\Injector;
 use Parser;
@@ -1061,7 +1061,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function MalformedBracketInjection__finalise(&$res)
     {
         $lookup = $res['text'];
-        throw new SSTemplateParseException("Malformed bracket injection $lookup. Perhaps you have forgotten the " .
+        throw new TemplateParseException("Malformed bracket injection $lookup. Perhaps you have forgotten the " .
             "closing bracket (})?", $this);
     }
 
@@ -1181,7 +1181,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     	$matchrule = "QuotedString"; $result = $this->construct($matchrule, $matchrule, null);
     	$_154 = NULL;
     	do {
-    		$stack[] = $result; $result = $this->construct( $matchrule, "q" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "q" );
     		if (( $subres = $this->rx( '/[\'"]/' ) ) !== FALSE) {
     			$result["text"] .= $subres;
     			$subres = $result; $result = array_pop($stack);
@@ -1191,7 +1191,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     			$result = array_pop($stack);
     			$_154 = FALSE; break;
     		}
-    		$stack[] = $result; $result = $this->construct( $matchrule, "String" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "String" );
     		if (( $subres = $this->rx( '/ (\\\\\\\\ | \\\\. | [^'.$this->expression($result, $stack, 'q').'\\\\])* /' ) ) !== FALSE) {
     			$result["text"] .= $subres;
     			$subres = $result; $result = array_pop($stack);
@@ -1544,7 +1544,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		$pos_211 = $this->pos;
     		$_210 = NULL;
     		do {
-    			$stack[] = $result; $result = $this->construct( $matchrule, "Not" ); 
+    			$stack[] = $result; $result = $this->construct( $matchrule, "Not" );
     			if (( $subres = $this->literal( 'not' ) ) !== FALSE) {
     				$result["text"] .= $subres;
     				$subres = $result; $result = array_pop($stack);
@@ -1939,7 +1939,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		else { $_286 = FALSE; break; }
     		if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
     		else { $_286 = FALSE; break; }
-    		$stack[] = $result; $result = $this->construct( $matchrule, "Call" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "Call" );
     		$_282 = NULL;
     		do {
     			$matcher = 'match_'.'Word'; $key = $matcher; $pos = $this->pos;
@@ -2444,7 +2444,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		$_379 = NULL;
     		do {
     			if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
-    			$stack[] = $result; $result = $this->construct( $matchrule, "Conditional" ); 
+    			$stack[] = $result; $result = $this->construct( $matchrule, "Conditional" );
     			$_375 = NULL;
     			do {
     				$_373 = NULL;
@@ -2847,13 +2847,13 @@ class SSTemplateParser extends Parser implements TemplateParser
 
     function CacheRestrictedTemplate_CacheBlock(&$res, $sub)
     {
-        throw new SSTemplateParseException('You cant have cache blocks nested within with, loop or control blocks ' .
+        throw new TemplateParseException('You cant have cache blocks nested within with, loop or control blocks ' .
             'that are within cache blocks', $this);
     }
 
     function CacheRestrictedTemplate_UncachedBlock(&$res, $sub)
     {
-        throw new SSTemplateParseException('You cant have uncache blocks nested within with, loop or control blocks ' .
+        throw new TemplateParseException('You cant have uncache blocks nested within with, loop or control blocks ' .
             'that are within cache blocks', $this);
     }
 
@@ -2870,7 +2870,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		if (( $subres = $this->literal( '<%' ) ) !== FALSE) { $result["text"] .= $subres; }
     		else { $_511 = FALSE; break; }
     		if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
-    		$stack[] = $result; $result = $this->construct( $matchrule, "CacheTag" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "CacheTag" );
     		$_464 = NULL;
     		do {
     			$_462 = NULL;
@@ -2929,7 +2929,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		$_480 = NULL;
     		do {
     			if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
-    			$stack[] = $result; $result = $this->construct( $matchrule, "Conditional" ); 
+    			$stack[] = $result; $result = $this->construct( $matchrule, "Conditional" );
     			$_476 = NULL;
     			do {
     				$_474 = NULL;
@@ -3139,7 +3139,7 @@ class SSTemplateParser extends Parser implements TemplateParser
             $parser = Injector::inst()->get(__CLASS__, false);
             $result = $parser->compileString($globalKey, '', false, false);
             if (!$result) {
-                throw new SSTemplateParseException('Unexpected problem parsing template', $parser);
+                throw new TemplateParseException('Unexpected problem parsing template', $parser);
             }
             $res['php'] .= $result . PHP_EOL;
         }
@@ -3869,7 +3869,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     			unset( $pos_641 );
     		}
     		if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
-    		$stack[] = $result; $result = $this->construct( $matchrule, "Zap" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "Zap" );
     		if (( $subres = $this->literal( '%>' ) ) !== FALSE) {
     			$result["text"] .= $subres;
     			$subres = $result; $result = array_pop($stack);
@@ -3952,7 +3952,7 @@ class SSTemplateParser extends Parser implements TemplateParser
         } elseif (isset($this->closedBlocks[$blockname])) {
             $res['php'] = call_user_func($this->closedBlocks[$blockname], $res);
         } else {
-            throw new SSTemplateParseException('Unknown closed block "'.$blockname.'" encountered. Perhaps you are ' .
+            throw new TemplateParseException('Unknown closed block "'.$blockname.'" encountered. Perhaps you are ' .
             'not supposed to close this block, or have mis-spelled it?', $this);
         }
     }
@@ -3963,7 +3963,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function ClosedBlock_Handle_Loop(&$res)
     {
         if ($res['ArgumentCount'] > 1) {
-            throw new SSTemplateParseException('Either no or too many arguments in control block. Must be one ' .
+            throw new TemplateParseException('Either no or too many arguments in control block. Must be one ' .
                 'argument only.', $this);
         }
 
@@ -3973,7 +3973,7 @@ class SSTemplateParser extends Parser implements TemplateParser
         } else {    //loop in the normal way
             $arg = $res['Arguments'][0];
             if ($arg['ArgumentMode'] == 'string') {
-                throw new SSTemplateParseException('Control block cant take string as argument.', $this);
+                throw new TemplateParseException('Control block cant take string as argument.', $this);
             }
             $on = str_replace(
                 '$$FINAL',
@@ -3994,13 +3994,13 @@ class SSTemplateParser extends Parser implements TemplateParser
     function ClosedBlock_Handle_With(&$res)
     {
         if ($res['ArgumentCount'] != 1) {
-            throw new SSTemplateParseException('Either no or too many arguments in with block. Must be one ' .
+            throw new TemplateParseException('Either no or too many arguments in with block. Must be one ' .
                 'argument only.', $this);
         }
 
         $arg = $res['Arguments'][0];
         if ($arg['ArgumentMode'] == 'string') {
-            throw new SSTemplateParseException('Control block cant take string as argument.', $this);
+            throw new TemplateParseException('Control block cant take string as argument.', $this);
         }
 
         $on = str_replace('$$FINAL', 'obj', ($arg['ArgumentMode'] == 'default') ? $arg['lookup_php'] : $arg['php']);
@@ -4100,7 +4100,7 @@ class SSTemplateParser extends Parser implements TemplateParser
         } elseif (isset($this->openBlocks[$blockname])) {
             $res['php'] = call_user_func($this->openBlocks[$blockname], $res);
         } else {
-            throw new SSTemplateParseException('Unknown open block "'.$blockname.'" encountered. Perhaps you missed ' .
+            throw new TemplateParseException('Unknown open block "'.$blockname.'" encountered. Perhaps you missed ' .
             ' the closing tag or have mis-spelled it?', $this);
         }
     }
@@ -4122,7 +4122,7 @@ class SSTemplateParser extends Parser implements TemplateParser
             $php = ($arg['ArgumentMode'] == 'default') ? $arg['lookup_php'] : $arg['php'];
             return '$val .= Debug::show('.str_replace('FINALGET!', 'cachedCall', $php ?? '').');';
         } else {
-            throw new SSTemplateParseException('Debug takes 0 or 1 argument only.', $this);
+            throw new TemplateParseException('Debug takes 0 or 1 argument only.', $this);
         }
     }
 
@@ -4132,7 +4132,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function OpenBlock_Handle_Base_tag(&$res)
     {
         if ($res['ArgumentCount'] != 0) {
-            throw new SSTemplateParseException('Base_tag takes no arguments', $this);
+            throw new TemplateParseException('Base_tag takes no arguments', $this);
         }
         return '$val .= \\SilverStripe\\View\\SSViewer::get_base_tag($val);';
     }
@@ -4143,7 +4143,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function OpenBlock_Handle_Current_page(&$res)
     {
         if ($res['ArgumentCount'] != 0) {
-            throw new SSTemplateParseException('Current_page takes no arguments', $this);
+            throw new TemplateParseException('Current_page takes no arguments', $this);
         }
         return '$val .= $_SERVER[SCRIPT_URL];';
     }
@@ -4180,7 +4180,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function MismatchedEndBlock__finalise(&$res)
     {
         $blockname = $res['Word']['text'];
-        throw new SSTemplateParseException('Unexpected close tag end_' . $blockname .
+        throw new TemplateParseException('Unexpected close tag end_' . $blockname .
             ' encountered. Perhaps you have mis-nested blocks, or have mis-spelled a tag?', $this);
     }
 
@@ -4267,7 +4267,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function MalformedOpenTag__finalise(&$res)
     {
         $tag = $res['Tag']['text'];
-        throw new SSTemplateParseException("Malformed opening block tag $tag. Perhaps you have tried to use operators?", $this);
+        throw new TemplateParseException("Malformed opening block tag $tag. Perhaps you have tried to use operators?", $this);
     }
 
     /* MalformedCloseTag: '<%' < Tag:('end_' :Word ) !( > '%>' ) */
@@ -4279,7 +4279,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     		if (( $subres = $this->literal( '<%' ) ) !== FALSE) { $result["text"] .= $subres; }
     		else { $_699 = FALSE; break; }
     		if (( $subres = $this->whitespace(  ) ) !== FALSE) { $result["text"] .= $subres; }
-    		$stack[] = $result; $result = $this->construct( $matchrule, "Tag" ); 
+    		$stack[] = $result; $result = $this->construct( $matchrule, "Tag" );
     		$_693 = NULL;
     		do {
     			if (( $subres = $this->literal( 'end_' ) ) !== FALSE) { $result["text"] .= $subres; }
@@ -4332,7 +4332,7 @@ class SSTemplateParser extends Parser implements TemplateParser
     function MalformedCloseTag__finalise(&$res)
     {
         $tag = $res['Tag']['text'];
-        throw new SSTemplateParseException("Malformed closing block tag $tag. Perhaps you have tried to pass an " .
+        throw new TemplateParseException("Malformed closing block tag $tag. Perhaps you have tried to pass an " .
             "argument to one?", $this);
     }
 
@@ -5020,7 +5020,7 @@ EOC;
     /**
      * Compiles some passed template source code into the php code that will execute as per the template source.
      *
-     * @throws SSTemplateParseException
+     * @throws TemplateParseException
      * @param string $string The source of the template
      * @param string $templateName The name of the template, normally the filename the template source was loaded from
      * @param bool $includeDebuggingComments True is debugging comments should be included in the output
@@ -5049,7 +5049,7 @@ EOC;
                 $result = $this->match_Template();
             }
             if (!$result) {
-                throw new SSTemplateParseException('Unexpected problem parsing template', $this);
+                throw new TemplateParseException('Unexpected problem parsing template', $this);
             }
 
             // Get the result

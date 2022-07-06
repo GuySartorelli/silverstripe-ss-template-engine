@@ -1,11 +1,10 @@
 <?php
 
-namespace SilverStripe\Templates\SS;
+namespace SilverStripe\Template;
 
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\View\SSTemplateParser;
+use SilverStripe\Template\Parser\TemplateParser;
 use SilverStripe\View\TemplateEngine as ViewTemplateEngine;
-use SilverStripe\View\TemplateParser;
 
 class TemplateEngine implements ViewTemplateEngine
 {
@@ -22,7 +21,7 @@ class TemplateEngine implements ViewTemplateEngine
     public function getParser(): TemplateParser
     {
         if (!$this->parser) {
-            $this->setParser(Injector::inst()->get(SSTemplateParser::class));
+            $this->setParser(Injector::inst()->get(TemplateParser::class));
         }
         return $this->parser;
     }

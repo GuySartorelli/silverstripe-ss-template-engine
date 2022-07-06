@@ -3,4 +3,8 @@ name: ss-template-engine
 ---
 SilverStripe\View\SSViewer:
   template_engines:
-    ss: SilverStripe\Templates\SS\TemplateEngine
+    ss: SilverStripe\Template\TemplateEngine
+
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Template\Parser\TemplateParser:
+    class: SilverStripe\Template\Parser\SSTemplateParser

@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\View;
 
 use SilverStripe\Dev\Deprecation;
 

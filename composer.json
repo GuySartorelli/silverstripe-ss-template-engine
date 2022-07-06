@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripe\\View\\": "src/View/"
+            "SilverStripe\\Template\\": "src/"
         }
     },
     "include-path": [
@@ -27,7 +27,7 @@
         "thirdparty/"
     ],
     "scripts": {
-        "php-peg": "php thirdparty/php-peg/cli.php src/View/SSTemplateParser.peg > src/View/SSTemplateParser.php"
+        "php-peg": "php thirdparty/php-peg/cli.php src/Parser/SSTemplateParser.peg > src/Parser/SSTemplateParser.php"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

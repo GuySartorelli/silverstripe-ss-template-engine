@@ -1,10 +1,11 @@
 <?php
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\View;
 
 use InvalidArgumentException;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\View\ViewableData;
 
 /**
  * This extends SSViewer_Scope to mix in data on top of what the item provides. This can be "global"
@@ -105,7 +106,7 @@ class SSViewer_DataPresenter extends SSViewer_Scope
      */
     protected function getPropertiesFromProvider($interfaceToQuery, $variableMethod, $createObject = false)
     {
-        $methods = [];
+        $result = [];
 
         $implementors = ClassInfo::implementorsOf($interfaceToQuery);
         if ($implementors) {

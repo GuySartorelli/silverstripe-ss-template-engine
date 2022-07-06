@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\Parser;
 
 use Exception;
 
@@ -9,13 +9,13 @@ use Exception;
  * so we can't know if the template will run, just if it's malformed. It also won't catch mistakes that still look
  * valid.
  */
-class SSTemplateParseException extends Exception
+class TemplateParseException extends Exception
 {
 
     /**
      * SSTemplateParseException constructor.
      * @param string $message
-     * @param SSTemplateParser $parser
+     * @param TemplateParser $parser
      */
     public function __construct($message, $parser)
     {

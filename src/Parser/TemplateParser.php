@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\Parser;
 
 /**
  * This interface needs to be implemented by any template parser that is used in SSViewer

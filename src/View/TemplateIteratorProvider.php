@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\View;
+namespace SilverStripe\Template\View;
 
 /**
  * Interface that is implemented by any classes that want to expose a method that can be called in any
