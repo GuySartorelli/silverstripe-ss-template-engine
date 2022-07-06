@@ -1,0 +1,6 @@
+---
+name: ss-template-engine
+---
+SilverStripe\View\SSViewer:
+  template_engines:
+    ss: SilverStripe\Templates\SS\TemplateEngine
