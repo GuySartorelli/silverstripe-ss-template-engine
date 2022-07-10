@@ -4,6 +4,7 @@ namespace SilverStripe\Template;
 
 use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Path;
 use SilverStripe\Security\Permission;
@@ -15,7 +16,7 @@ use SilverStripe\View\TemplateEngine as ViewTemplateEngine;
 use SilverStripe\View\ViewableData;
 use Symfony\Component\Filesystem\Filesystem;
 
-class TemplateEngine implements ViewTemplateEngine
+class TemplateEngine implements ViewTemplateEngine, Flushable
 {
     private ?TemplateParser $parser = null;
 
@@ -33,11 +34,7 @@ class TemplateEngine implements ViewTemplateEngine
 
     public function process(string $template, ViewableData $item, array $overlay, array $underlay, ?SSViewer_Scope $inheritedScope = null): string
     {
-        $cacheFile = Path::join(
-            TEMP_PATH,
-            '.ss-template-cache',
-            str_replace(['\\','/',':'], '.', Director::makeRelative(realpath($template ?? '')) ?? '')
-        );
+        $cacheFile = Path::join(static::getCacheDir(), $this->getCacheKey($template));
         $lastEdited = filemtime($template ?? '');
 
         $filesystem = new Filesystem();
@@ -74,14 +71,6 @@ class TemplateEngine implements ViewTemplateEngine
     }
 
     /**
-     * Parse a template string into cachable PHP code
-     */
-    protected function parseToCachablePhp(string $content, bool $includeDebugComments = false, string $templateName = ''): string
-    {
-        return $this->getParser()->compileString($content, $templateName, $includeDebugComments);
-    }
-
-    /**
      * Returns the parser that is set for template generation
      */
     public function getParser(): TemplateParser
@@ -106,35 +95,26 @@ class TemplateEngine implements ViewTemplateEngine
      */
     public static function flush()
     {
-        self::flush_template_cache(true);
-        self::flush_cacheblock_cache(true);
+        self::flush_template_cache();
+        self::flush_cacheblock_cache();
     }
 
     /**
      * Clears all parsed template files in the cache folder.
-     * Can only be called once per request (there may be multiple SSViewer instances) unless forced.
      */
-    public static function flush_template_cache(bool $force = false): void
+    public static function flush_template_cache(): void
     {
-        if (!self::$template_cache_flushed || $force) {
-            $cacheDir = Path::join(TEMP_PATH, '.ss-template-cache');
-            $fileSystem = new Filesystem();
-            $fileSystem->remove($cacheDir);
-            self::$template_cache_flushed = true;
-        }
+        $fileSystem = new Filesystem();
+        $fileSystem->remove(static::getCacheDir());
     }
 
     /**
      * Clears all partial cache blocks.
-     * Can only be called once per request (there may be multiple SSViewer instances) unless forced.
      */
-    public static function flush_cacheblock_cache(bool $force = false): void
+    public static function flush_cacheblock_cache(): void
     {
-        if (!self::$cacheblock_cache_flushed || $force) {
-            $cache = Injector::inst()->get(CacheInterface::class . '.cacheblock');
-            $cache->clear();
-            self::$cacheblock_cache_flushed = true;
-        }
+        $cache = Injector::inst()->get(CacheInterface::class . '.cacheblock');
+        $cache->clear();
     }
 
     /**
@@ -155,5 +135,29 @@ class TemplateEngine implements ViewTemplateEngine
             return $this->partialCacheStore;
         }
         return Injector::inst()->get(CacheInterface::class . '.cacheblock');
+    }
+
+    /**
+     * Parse a template string into cachable PHP code
+     */
+    protected function parseToCachablePhp(string $content, bool $includeDebugComments = false, string $templateName = ''): string
+    {
+        return $this->getParser()->compileString($content, $templateName, $includeDebugComments);
+    }
+
+    /**
+     * Get the cache key for a given template file
+     */
+    protected function getCacheKey(string $template): string
+    {
+        return str_replace(['\\','/',':'], '.', Director::makeRelative(realpath($template ?? '')) ?? '') . '-php';
+    }
+
+    /**
+     * Get the path to the directory where template cache is stored.
+     */
+    protected static function getCacheDir(): string
+    {
+        return Path::join(TEMP_PATH, '.ss-template-cache');
     }
 }
