@@ -12,6 +12,7 @@ namespace SilverStripe\Template\Parser;
 use SilverStripe\Core\Injector\Injector;
 use Parser;
 use InvalidArgumentException;
+use SilverStripe\View\SSViewer;
 
 $base = dirname(__FILE__);
 require_once($base.'/../../thirdparty/php-peg/Parser.php');
