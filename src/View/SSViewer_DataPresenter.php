@@ -5,6 +5,7 @@ namespace SilverStripe\Template\View;
 use InvalidArgumentException;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\View\SSViewer;
 use SilverStripe\View\ViewableData;
 
 /**
@@ -16,14 +17,6 @@ use SilverStripe\View\ViewableData;
  */
 class SSViewer_DataPresenter extends SSViewer_Scope
 {
-    /**
-     * List of global property providers
-     *
-     * @internal
-     * @var TemplateGlobalProvider[]|null
-     */
-    private static $globalProperties = null;
-
     /**
      * List of global iterator providers
      *
@@ -63,23 +56,7 @@ class SSViewer_DataPresenter extends SSViewer_Scope
         $this->overlay = $overlay ?: [];
         $this->underlay = $underlay ?: [];
 
-        $this->cacheGlobalProperties();
         $this->cacheIteratorProperties();
-    }
-
-    /**
-     * Build cache of global properties
-     */
-    protected function cacheGlobalProperties()
-    {
-        if (self::$globalProperties !== null) {
-            return;
-        }
-
-        self::$globalProperties = $this->getPropertiesFromProvider(
-            TemplateGlobalProvider::class,
-            'get_template_global_variables'
-        );
     }
 
     /**
@@ -91,64 +68,11 @@ class SSViewer_DataPresenter extends SSViewer_Scope
             return;
         }
 
-        self::$iteratorProperties = $this->getPropertiesFromProvider(
+        self::$iteratorProperties = SSViewer::getPropertiesFromProvider(
             TemplateIteratorProvider::class,
             'get_template_iterator_variables',
             true // Call non-statically
         );
-    }
-
-    /**
-     * @var string $interfaceToQuery
-     * @var string $variableMethod
-     * @var boolean $createObject
-     * @return array
-     */
-    protected function getPropertiesFromProvider($interfaceToQuery, $variableMethod, $createObject = false)
-    {
-        $result = [];
-
-        $implementors = ClassInfo::implementorsOf($interfaceToQuery);
-        if ($implementors) {
-            foreach ($implementors as $implementor) {
-                // Create a new instance of the object for method calls
-                if ($createObject) {
-                    $implementor = new $implementor();
-                    $exposedVariables = $implementor->$variableMethod();
-                } else {
-                    $exposedVariables = $implementor::$variableMethod();
-                }
-
-                foreach ($exposedVariables as $varName => $details) {
-                    if (!is_array($details)) {
-                        $details = [
-                            'method' => $details,
-                            'casting' => ViewableData::config()->uninherited('default_cast')
-                        ];
-                    }
-
-                    // If just a value (and not a key => value pair), use method name for both key and value
-                    if (is_numeric($varName)) {
-                        $varName = $details['method'];
-                    }
-
-                    // Add in a reference to the implementing class (might be a string class name or an instance)
-                    $details['implementor'] = $implementor;
-
-                    // And a callable array
-                    if (isset($details['method'])) {
-                        $details['callable'] = [$implementor, $details['method']];
-                    }
-
-                    // Save with both uppercase & lowercase first letter, so either works
-                    $lcFirst = strtolower($varName[0] ?? '') . substr($varName ?? '', 1);
-                    $result[$lcFirst] = $details;
-                    $result[ucfirst($varName)] = $details;
-                }
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -386,8 +310,9 @@ class SSViewer_DataPresenter extends SSViewer_Scope
         }
 
         // And finally for global overrides
-        if (array_key_exists($property, self::$globalProperties)) {
-            return self::$globalProperties[$property];  //get the method call
+        $globalProperties = SSViewer::getGlobalProperties();
+        if (array_key_exists($property, $globalProperties)) {
+            return $globalProperties[$property];  //get the method call
         }
 
         // No value
